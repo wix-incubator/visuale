@@ -14,17 +14,6 @@ const baseDevConfig = () => ({
     todoapp: [hotScript, customPath, path.join(__dirname, '../chrome/extension/todoapp')],
     background: [hotScript, customPath, path.join(__dirname, '../chrome/extension/background')],
   },
-  // devMiddleware: {
-  //   publicPath: `http://${host}:${port}/js`,
-  //   stats: {
-  //     colors: true
-  //   },
-  //   noInfo: true,
-  //   headers: { 'Access-Control-Allow-Origin': '*' }
-  // },
-  // hotMiddleware: {
-  //   path: '/js/__webpack_hmr'
-  // },
   output: {
     path: path.join(__dirname, '../dev/js'),
     filename: '[name].bundle.js',
@@ -44,7 +33,7 @@ const baseDevConfig = () => ({
     new WriteFilePlugin({log: false, exitOnErrors: false, useHashIndex: false})
   ],
   resolve: {
-    extensions: ['*', '.js']
+    extensions: ['*', '.js', '.jsx', '.tsx', '.ts']
   },
   module: {
     rules: [{
@@ -72,7 +61,6 @@ injectPageConfig.entry = [
   customPath,
   path.join(__dirname, '../chrome/extension/inject')
 ];
-delete injectPageConfig.hotMiddleware;
 delete injectPageConfig.module.rules[0].options;
 injectPageConfig.plugins.shift(); // remove HotModuleReplacementPlugin
 injectPageConfig.output = {
@@ -83,10 +71,8 @@ injectPageConfig.output = {
 const contentScriptConfig = baseDevConfig();
 contentScriptConfig.entry = [
   customPath,
-  path.join(__dirname, '../chrome/extension/contentScript.jsx')
+  path.join(__dirname, '../chrome/extension/contentScript.tsx')
 ];
-delete contentScriptConfig.hotMiddleware;
-delete contentScriptConfig.module.rules[0].options;
 contentScriptConfig.plugins.shift(); // remove HotModuleReplacementPlugin
 contentScriptConfig.output = {
   path: path.join(__dirname, '../dev/js'),

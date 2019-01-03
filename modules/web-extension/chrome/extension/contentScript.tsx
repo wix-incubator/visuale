@@ -3,6 +3,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {ActionMenu, IAction} from './ActionMenu';
 
+const VISUALE_CONTAINER_ID = '--visuale-container';
+
 export interface IComponent {
   name: string;
   actions: IAction[];
@@ -99,11 +101,20 @@ function registerInspector() {
     lastComponent = component;
 
     console.log(`these are the available actions for ${name}`, component.actions.map((action: IAction) => action.name));
-    ReactDOM.render(<ActionMenu component={component}/>, document.getElementById('popover'));
-    const popper = new Popper(lastElement, document.querySelector('#popper') as Element, {
+    ReactDOM.render(<ActionMenu component={component}/>, document.getElementById(VISUALE_CONTAINER_ID));
+    const popper = new Popper(lastElement, document.getElementById(VISUALE_CONTAINER_ID) as Element, {
       placement: 'right',
+      modifiers: {
+        offset: {
+          offset: '0px, 10px',
+        },
+      },
     });
   });
 }
+
+const container = document.createElement('div');
+container.id = VISUALE_CONTAINER_ID;
+document.body.appendChild(container);
 
 registerInspector();

@@ -74,7 +74,7 @@
     "popper.js": "^1.14.6",
     "react": "^16.0.0",
     "react-dock": "^0.2.3",
-    "react-dom": "^15.0.2",
+    "react-dom": "^16.0.0",
     "react-redux": "^4.3.0",
     "redux": "^3.2.1",
     "redux-thunk": "^2.0.1"
