@@ -47,10 +47,13 @@ function registerInspector() {
     return instance.return.elementType && instance.return.elementType.name;
   }
 
-  function findDOMComponentName(el: HTMLElement): string {
+  function findDOMComponentName(el: HTMLElement | null): string | null {
+    if (!el) {
+      return null;
+    }
     const componentName = el && el.getAttribute('data-component');
     if (componentName === '_') {
-      return '';
+      return null;
     }
     if (componentName) {
       return componentName;
@@ -62,7 +65,7 @@ function registerInspector() {
     let instance;
     for (const key of Object.keys(el)) {
       if (key.startsWith('__reactInternalInstance$')) {
-        instance = el[key];
+        instance = (el as any)[key];
         break;
       }
     }
@@ -97,9 +100,9 @@ function registerInspector() {
 
     console.log(`these are the available actions for ${name}`, component.actions.map((action: IAction) => action.name));
     ReactDOM.render(<ActionMenu component={component}/>, document.getElementById('popover'));
-    (new Popper(lastElement, document.querySelector('#popper') as Element, {
+    const popper = new Popper(lastElement, document.querySelector('#popper') as Element, {
       placement: 'right',
-    }));
+    });
   });
 }
 
