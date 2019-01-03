@@ -1,24 +1,29 @@
 import React from 'react';
 
-export interface Action {
+interface IArg {
   name: string;
-  args: {name: string, type: string}
+  type: 'string' | 'generic' | 'number' | 'boolean';
 }
 
-export interface ActionMenuProps {
+export interface IAction {
+  name: string;
+  args: IArg[];
+}
+
+export interface IActionMenuProps {
   component: {
     name: string;
-    actions: Array<Action>;
+    actions: IAction[]
   };
 }
 
-export class ActionMenu extends React.Component<ActionMenuProps> {
+export class ActionMenu extends React.Component<IActionMenuProps> {
   public render() {
     const {component} = this.props;
     return (
       <div id="popper" style={{background: '#ddd', padding: '10px'}} data-component="_">
         <h3>{component.name}</h3>
-        {component.actions.map(action =>
+        {component.actions.map((action: IAction) =>
           <button onClick={() => this.recordAction(action.name)} key={action.name}>{action.name}</button>,
         )}
       </div>
@@ -27,12 +32,15 @@ export class ActionMenu extends React.Component<ActionMenuProps> {
 
   private recordAction = (actionName: string) => {
     const {component} = this.props;
-    const action = (component.actions as Array<Action>).find((action: Action) => action.name === actionName);
-    let parameters = [];
+    const action = component.actions.find((anAction: IAction) => anAction.name === actionName);
+    if (!action) {
+      return;
+    }
+    let parameters: string[] = [];
 
     if (action.args.length) {
       parameters = action.args.map((arg) =>
-        prompt(`${arg.name}: ${arg.type}`));
+        (prompt(`${arg.name}: ${arg.type}`)) || '');
     }
     console.log(`call ${component.name}.${actionName} with parameters ${JSON.stringify(parameters)}`);
   };

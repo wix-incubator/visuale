@@ -1,9 +1,14 @@
+import Popper from 'popper.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Popper from 'popper.js';
-import { ActionMenu } from './ActionMenu.tsx';
+import {ActionMenu, IAction} from './ActionMenu';
 
-const componentMap = {
+export interface IComponent {
+  name: string;
+  actions: IAction[];
+}
+
+const componentMap: Record<string, IComponent> = {
   MyComponent: {
     name: 'MyComponent',
     actions: [{
@@ -34,18 +39,18 @@ const componentMap = {
   },
 };
 
-function registerInspector () {
-  function findReactComponentName (instance) {
+function registerInspector() {
+  function findReactComponentName(instance: any): string {
     if (instance.return && instance.return.elementType && !instance.return.elementType.name) {
       return findReactComponentName(instance.return);
     }
     return instance.return.elementType && instance.return.elementType.name;
   }
 
-  function findDOMComponentName (el) {
+  function findDOMComponentName(el: HTMLElement): string {
     const componentName = el && el.getAttribute('data-component');
     if (componentName === '_') {
-      return null;
+      return '';
     }
     if (componentName) {
       return componentName;
@@ -53,7 +58,7 @@ function registerInspector () {
     return findDOMComponentName(el.parentElement);
   }
 
-  function findReactInstance (el) {
+  function findReactInstance(el: HTMLElement) {
     let instance;
     for (const key of Object.keys(el)) {
       if (key.startsWith('__reactInternalInstance$')) {
@@ -68,18 +73,17 @@ function registerInspector () {
     return findReactComponentName(instance);
   }
 
-  let lastElement = null;
-  let lastComponent = null;
+  let lastElement: HTMLElement | null = null;
+  let lastComponent: IComponent | null = null;
 
   document.body.addEventListener('click', (e) => {
     const {target} = e;
-
-    if (lastElement === target) {
+    if (!target || lastElement === target) {
       return;
     }
-    lastElement = target;
+    lastElement = target as HTMLElement;
 
-    const name = findDOMComponentName(target);
+    const name = findDOMComponentName(lastElement);
 
     if (!name || !componentMap[name]) {
       return;
@@ -91,13 +95,12 @@ function registerInspector () {
     }
     lastComponent = component;
 
-    console.log(`these are the available actions for ${name}`, Object.keys(component.actions));
+    console.log(`these are the available actions for ${name}`, component.actions.map((action: IAction) => action.name));
     ReactDOM.render(<ActionMenu component={component}/>, document.getElementById('popover'));
-    (new Popper(target, document.querySelector('#popper'), {
+    (new Popper(lastElement, document.querySelector('#popper') as Element, {
       placement: 'right',
     }));
   });
-};
+}
 
 registerInspector();
-
