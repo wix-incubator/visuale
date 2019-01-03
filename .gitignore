@@ -1,0 +1,29 @@
+# Logs
+logs
+*.log
+**/yarn-error.log
+
+# Dependencies
+modules/**/node_modules/
+
+# Coverage
+coverage
+
+# Transpiled files
+modules/**/build/
+
+# VS Code
+.vscode
+!.vscode/tasks.js
+
+# JetBrains IDEs
+.idea/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Misc
+.DS_Store

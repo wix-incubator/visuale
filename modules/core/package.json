@@ -1,0 +1,43 @@
+{
+  "name": "@beekeeper/core",
+  "main": "build/src/main.js",
+  "version": "0.0.1",
+  "description": "Let the 🐝 do the work, you get the 🍯!",
+  "engines": {
+    "node": ">= 10.13 <11"
+  },
+  "devDependencies": {
+    "@types/babel__core": "^7.0.4",
+    "@types/babel__traverse": "^7.0.4",
+    "@types/jest": "^23.3.10",
+    "@types/node": "^10",
+    "jest": "~23.6.0",
+    "prettier": "1.15.3",
+    "rimraf": "~2.6.2",
+    "ts-jest": "~23.10.5",
+    "tslint": "~5.11.0",
+    "tslint-config-prettier": "1.17.0",
+    "tslint-microsoft-contrib": "~6.0.0",
+    "tsutils": "~3.5.2",
+    "typescript": "~3.2.1"
+  },
+  "scripts": {
+    "clean": "rimraf coverage build tmp",
+    "build": "tsc -p tsconfig.release.json",
+    "build:watch": "tsc -w -p tsconfig.release.json",
+    "lint": "tslint -t stylish --project \"tsconfig.json\"",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "author": {
+   "email": "chenro@wix.com",
+   "name": "Chen Roth"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/parser": "^7.2.3",
+    "@babel/traverse": "^7.2.3",
+    "tslib": "~1.9.3"
+  }
+}
